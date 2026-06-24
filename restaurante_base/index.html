@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurante Ficticio</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Estilos propios del proyecto -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Encabezado principal del restaurante -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <span class="header-badge">Est. 2024</span>
+        <h1 class="site-title">La Maison</h1>
+        <p class="site-tagline">Cocina de autor con alma costarricense</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navegacion interna de secciones -->
+  <nav class="section-nav">
+    <div class="container">
+      <a href="#menu" class="nav-link-item">Menu</a>
+      <span class="nav-divider">|</span>
+      <a href="#reservas" class="nav-link-item">Reservaciones</a>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+
+    <!-- SECCION 1: MENU DEL RESTAURANTE. -->
+    <section id="menu" class="mb-5">
+      <div class="section-header">
+        <p class="section-eyebrow">Lo que ofrecemos</p>
+        <h2 class="section-title">Nuestro Menu</h2>
+        <p class="section-subtitle">
+          Ingredientes frescos, tecnicas clasicas, sabores que permanecen.
+        </p>
+      </div>
+
+      <!-- Botones de filtro por categoria -->
+      <div class="filter-bar" id="filtros">
+        <button class="btn-filtro activo" onclick="filtrarCategoria('Todos')">Todos</button>
+        <button class="btn-filtro" onclick="filtrarCategoria('Entrada')">Entradas</button>
+        <button class="btn-filtro" onclick="filtrarCategoria('Plato Fuerte')">Platos Fuertes</button>
+        <button class="btn-filtro" onclick="filtrarCategoria('Postre')">Postres</button>
+      </div>
+
+      <!-- Contenedor donde JavaScript inyecta las cards de platillos -->
+      <div class="row g-4" id="contenedor-menu"></div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SECCION 2: FORMULARIO DE RESERVAS -->
+    <section id="reservas" class="mt-5">
+      <div class="section-header">
+        <p class="section-eyebrow">Reserve su mesa</p>
+        <h2 class="section-title">Reservaciones</h2>
+        <p class="section-subtitle">
+          Complete el formulario y nos pondremos en contacto para confirmar.
+        </p>
+      </div>
+
+      <div class="row g-5">
+
+        <!-- Columna izquierda: formulario -->
+        <div class="col-lg-6">
+          <div class="form-card">
+            <form id="form-reserva" novalidate>
+
+              <!-- Campo: Nombre completo -->
+              <div class="campo-grupo">
+                <label for="nombre" class="campo-label">Nombre completo</label>
+                <input
+                  type="text"
+                  id="nombre"
+                  class="campo-input"
+                  placeholder="Ej. Maria Gonzalez"
+                  autocomplete="name"
+                />
+                <!-- El mensaje de error se inyecta aqui desde JS -->
+                <span class="error-campo" id="error-nombre"></span>
+              </div>
+
+              <!-- Campo: Correo electronico -->
+              <div class="campo-grupo">
+                <label for="correo" class="campo-label">Correo electronico</label>
+                <input
+                  type="email"
+                  id="correo"
+                  class="campo-input"
+                  placeholder="correo@ejemplo.com"
+                  autocomplete="email"
+                />
+                <span class="error-campo" id="error-correo"></span>
+              </div>
+
+              <!-- Campo: Fecha de reserva -->
+              <div class="campo-grupo">
+                <label for="fecha" class="campo-label">Fecha de reserva</label>
+                <input
+                  type="date"
+                  id="fecha"
+                  class="campo-input"
+                />
+                <span class="error-campo" id="error-fecha"></span>
+              </div>
+
+              <!-- Campo: Hora (select con opciones predefinidas) -->
+              <div class="campo-grupo">
+                <label for="hora" class="campo-label">Hora</label>
+                <select id="hora" class="campo-input">
+                  <option value="">-- Seleccione una hora --</option>
+                  <option value="12:00">12:00</option>
+                  <option value="13:00">13:00</option>
+                  <option value="18:00">18:00</option>
+                  <option value="19:00">19:00</option>
+                  <option value="20:00">20:00</option>
+                </select>
+                <span class="error-campo" id="error-hora"></span>
+              </div>
+
+              <!-- Campo: Numero de personas -->
+              <div class="campo-grupo">
+                <label for="personas" class="campo-label">Numero de personas</label>
+                <input
+                  type="number"
+                  id="personas"
+                  class="campo-input"
+                  placeholder="Entre 1 y 20"
+                  min="1"
+                  max="20"
+                />
+                <span class="error-campo" id="error-personas"></span>
+              </div>
+
+              <!-- Campo: Comentarios (opcional) -->
+              <div class="campo-grupo">
+                <label for="comentarios" class="campo-label">
+                  Comentarios
+                  <span class="label-opcional">(opcional)</span>
+                </label>
+                <textarea
+                  id="comentarios"
+                  class="campo-input"
+                  rows="3"
+                  placeholder="Alergias, preferencias, ocasion especial..."
+                ></textarea>
+              </div>
+
+              <!-- Boton de envio: deshabilitado hasta que el formulario sea valido -->
+              <button type="submit" class="btn-reservar" id="btn-enviar" disabled>
+                Confirmar reserva
+              </button>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Columna derecha: tabla de reservas registradas -->
+        <div class="col-lg-6">
+          <div class="tabla-card">
+            <h3 class="tabla-titulo">Reservas registradas</h3>
+
+            <!-- Contenedor de la tabla, visible cuando hay reservas -->
+            <div id="contenedor-tabla">
+              <!-- Estado vacio: visible cuando no hay reservas -->
+              <div class="tabla-vacia" id="tabla-vacia">
+                <div class="vacia-icono">&#x1F374;</div>
+                <p class="vacia-texto">
+                  Aun no hay reservas registradas. El formulario de la izquierda le permitira agregar la primera.
+                </p>
+              </div>
+
+              <!-- La tabla se muestra una vez que hay al menos una reserva -->
+              <div id="wrapper-tabla" style="display:none;">
+                <div class="table-responsive">
+                  <table class="tabla-reservas">
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Personas</th>
+                      </tr>
+                    </thead>
+                    <!-- Las filas se inyectan dinamicamente desde agregarReserva() -->
+                    <tbody id="cuerpo-tabla"></tbody>
+                  </table>
+                </div>
+
+                <!-- Resumen dinamico que se actualiza con cada reserva -->
+                <div class="resumen-reservas" id="resumen">
+                  <div class="resumen-item">
+                    <span class="resumen-label">Total de reservas</span>
+                    <span class="resumen-valor" id="total-reservas">0</span>
+                  </div>
+                  <div class="resumen-item">
+                    <span class="resumen-label">Total de personas</span>
+                    <span class="resumen-valor" id="total-personas">0</span>
+                  </div>
+                  <div class="resumen-item">
+                    <span class="resumen-label">Reserva mas grande</span>
+                    <span class="resumen-valor" id="mayor-reserva">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de pagina -->
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-nombre">La Maison &mdash; Restaurante Ficticio</p>
+      <p class="footer-sub">Todos los derechos reservados &copy; 2024</p>
+    </div>
+  </footer>
+
+  <!-- Logica principal del restaurante -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>
